@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
+<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
+    <id>vicentemferrer:GitWorkflowManager</id>
+    <name>Git Workflow Manager</name>
+    <version>1.0</version>
+    <type>modification</type>
+
+    <install for="SMF 2.1.*">
+        <require-dir name="GitWorkflowManager" destination="$sourcedir" />
+        <require-file name="Themes/default/GitWorkflowManager.template.php" destination="$themedir" />
+
+        <require-file name="languages/GitWorkflowManager.english.php" destination="$themes_dir/default/languages" />
+        <require-file name="languages/GitWorkflowManager.spanish_latin.php" destination="$themes_dir/default/languages" />
+
+        <require-dir name="gwm_migrations" destination="$boarddir" />
+
+        <database>database.php</database>
+
+        <hook hook="integrate_pre_include" function="$sourcedir/GitWorkflowManager/Integration.php" />
+        <hook hook="integrate_admin_areas" function="GitWorkflowManager\Integration::hook_admin_areas" />
+    </install>
+
+    <uninstall for="SMF 2.1.*">
+        <hook reverse="true" hook="integrate_pre_include" function="$sourcedir/GitWorkflowManager/Integration.php" />
+        <hook reverse="true" hook="integrate_admin_areas" function="GitWorkflowManager\Integration::hook_admin_areas" />
+
+        <remove-dir name="$sourcedir/GitWorkflowManager" />
+
+        <remove-file name="$themedir/GitWorkflowManager.template.php" />
+        <remove-file name="$themes_dir/default/languages/GitWorkflowManager.english.php" />
+        <remove-file name="$themes_dir/default/languages/GitWorkflowManager.spanish_latin.php" />
+    </uninstall>
+</package-info>

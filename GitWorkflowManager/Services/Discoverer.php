@@ -1,6 +1,6 @@
 <?php
 
-namespace SMF\Mods\DevFlow\Services;
+namespace GitWorkflowManager\Services;
 
 /**
  * Class Discoverer
@@ -35,11 +35,7 @@ class Discoverer
 
         foreach ($files as $file) {
             $filename = basename($file, '.php');
-            
-            // Skip files that don't match our naming convention (optional but good practice)
-            // Convention: YYYY_MM_DD_Name.php
-            // For now, we accept all .php files as potential migrations
-            
+
             $migrations[$filename] = [
                 'version' => $filename,
                 'file' => $file,

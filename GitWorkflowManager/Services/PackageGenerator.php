@@ -1,9 +1,9 @@
 <?php
 
-namespace SMF\Mods\DevFlow\Services;
+namespace GitWorkflowManager\Services;
 
-use SMF\Mods\DevFlow\AbstractMigration;
-use SMF\Mods\DevFlow\Handlers\RecordingHandler;
+use GitWorkflowManager\AbstractMigration;
+use GitWorkflowManager\Handlers\RecordingHandler;
 
 /**
  * Class PackageGenerator
@@ -17,7 +17,7 @@ class PackageGenerator
     public function __construct()
     {
         global $boarddir;
-        $this->tempDir = $boarddir . '/Packages/temp_devflow_' . time();
+        $this->tempDir = $boarddir . '/Packages/temp_gwm_' . time();
     }
 
     public function generate($file, $className)
@@ -28,9 +28,9 @@ class PackageGenerator
         }
         require_once $file;
         $migration = new $className();
-        
+
         if (!($migration instanceof AbstractMigration)) {
-             throw new \Exception('Invalid migration class.');
+            throw new \Exception('Invalid migration class.');
         }
 
         // 2. Setup Recording Handlers
@@ -71,7 +71,6 @@ class PackageGenerator
             $this->removeDirectory($this->tempDir);
 
             return $zipPath;
-
         } catch (\Exception $e) {
             $this->removeDirectory($this->tempDir);
             throw $e;
@@ -89,10 +88,10 @@ class PackageGenerator
             $method = $action['method'];
             $args = $action['args'];
             // Basic serialization of arguments to PHP code
-            $exportedArgs = array_map(function($arg) {
+            $exportedArgs = array_map(function ($arg) {
                 return var_export($arg, true);
             }, $args);
-            
+
             $php .= "\$smcFunc['" . $method . "'](" . implode(', ', $exportedArgs) . ");\n";
         }
 
@@ -104,8 +103,8 @@ class PackageGenerator
         $xml = '<?xml version="1.0"?>' . "\n";
         $xml .= '<!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">' . "\n";
         $xml .= '<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">' . "\n";
-        
-        $xml .= "\t<id>DevFlow:" . $name . "</id>\n";
+
+        $xml .= "\t<id>GitWorkflowManager:" . $name . "</id>\n";
         $xml .= "\t<name>" . $name . "</name>\n";
         $xml .= "\t<version>1.0</version>\n";
         $xml .= "\t<type>modification</type>\n";
@@ -113,8 +112,13 @@ class PackageGenerator
         // Install Section
         $xml .= "\t<install>\n";
         foreach ($install->getHooks() as $hook) {
-            $xml .= sprintf("\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" />\n",
-                $hook['hook'], $hook['function'], $hook['file'], $hook['object'] ? 'true' : 'false');
+            $xml .= sprintf(
+                "\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" />\n",
+                $hook['hook'],
+                $hook['function'],
+                $hook['file'],
+                $hook['object'] ? 'true' : 'false'
+            );
         }
         $xml .= "\t\t<code>install_db.php</code>\n";
         $xml .= "\t</install>\n";
@@ -122,23 +126,23 @@ class PackageGenerator
         // Uninstall Section
         $xml .= "\t<uninstall>\n";
         foreach ($uninstall->getHooks() as $hook) {
-             // In uninstall, we typically reverse hooks. 
-             // SMF <uninstall> block executes things.
-             // If we recorded a 'removeHook' in down(), we want to execute a remove.
-             // But SMF XML usually uses reverse="true" on <install> block logic for uninstalls.
-             // However, since we have explicit down() logic, we can just list the hooks to be removed/added explicitly.
-             // If down() says "removeHook", we output a hook tag with reverse="true" or just rely on the fact that removing a hook is an action.
-             // Wait, standard SMF XML <hook> adds. <hook reverse="true"> removes.
-             // If down() calls removeHook, we should output <hook reverse="true">.
-             
-             if ($hook['type'] === 'remove') {
-                 $xml .= sprintf("\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" reverse=\"true\" />\n",
-                    $hook['hook'], $hook['function'], $hook['file'], $hook['object'] ? 'true' : 'false');
-             } else {
-                 // If down() adds a hook (weird but possible), standard tag.
-                 $xml .= sprintf("\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" />\n",
-                    $hook['hook'], $hook['function'], $hook['file'], $hook['object'] ? 'true' : 'false');
-             }
+            if ($hook['type'] === 'remove') {
+                $xml .= sprintf(
+                    "\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" reverse=\"true\" />\n",
+                    $hook['hook'],
+                    $hook['function'],
+                    $hook['file'],
+                    $hook['object'] ? 'true' : 'false'
+                );
+            } else {
+                $xml .= sprintf(
+                    "\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" />\n",
+                    $hook['hook'],
+                    $hook['function'],
+                    $hook['file'],
+                    $hook['object'] ? 'true' : 'false'
+                );
+            }
         }
         $xml .= "\t\t<code>uninstall_db.php</code>\n";
         $xml .= "\t</uninstall>\n";
@@ -186,9 +190,10 @@ class PackageGenerator
         return $zip->close();
     }
 
-    protected function removeDirectory($dir) {
+    protected function removeDirectory($dir)
+    {
         if (!is_dir($dir)) return;
-        $files = array_diff(scandir($dir), array('.','..'));
+        $files = array_diff(scandir($dir), array('.', '..'));
         foreach ($files as $file) {
             (is_dir("$dir/$file")) ? $this->removeDirectory("$dir/$file") : unlink("$dir/$file");
         }
