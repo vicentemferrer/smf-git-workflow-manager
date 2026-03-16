@@ -3,7 +3,7 @@
 /**
  * Git Workflow Manager for SMF
  * @author vicentemferrer
- * @copyright 2023 vicentemferrer
+ * @copyright 2026 vicentemferrer
  * @license MIT License
  */
 $txt['gwm_title'] = 'Git Workflow Manager';
