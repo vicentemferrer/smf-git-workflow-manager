@@ -63,3 +63,5 @@ class Integration
         });
     }
 }
+
+\GitWorkflowManager\Integration::registerAutoloader();

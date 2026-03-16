@@ -51,6 +51,8 @@ class DbLogger
             ],
         ];
 
+        db_extend('packages');
+
         $smcFunc['db_create_table']($this->table_name, $columns, $indexes, [], 'ignore');
     }
 
@@ -97,7 +99,7 @@ class DbLogger
             $this->table_name,
             ['version' => 'string', 'applied_at' => 'int'],
             [$version, time()],
-            ['id_migration']
+            ['version']
         );
     }
 

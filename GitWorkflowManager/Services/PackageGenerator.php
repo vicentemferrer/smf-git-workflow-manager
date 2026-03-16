@@ -120,7 +120,7 @@ class PackageGenerator
                 $hook['object'] ? 'true' : 'false'
             );
         }
-        $xml .= "\t\t<code>install_db.php</code>\n";
+        $xml .= "\t\t<database>install_db.php</database>\n";
         $xml .= "\t</install>\n";
 
         // Uninstall Section
@@ -144,7 +144,7 @@ class PackageGenerator
                 );
             }
         }
-        $xml .= "\t\t<code>uninstall_db.php</code>\n";
+        $xml .= "\t\t<database>uninstall_db.php</database>\n";
         $xml .= "\t</uninstall>\n";
 
         $xml .= '</package-info>';

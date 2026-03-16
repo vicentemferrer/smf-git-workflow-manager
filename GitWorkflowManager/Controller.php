@@ -4,6 +4,8 @@ namespace GitWorkflowManager;
 
 use GitWorkflowManager\Services\Discoverer;
 use GitWorkflowManager\Services\Runner;
+use GitWorkflowManager\Services\PackageGenerator;
+
 
 /**
  * Class Controller
@@ -74,6 +76,41 @@ class Controller
                     $context['gwm_success'] = sprintf($txt['gwm_reverted_success'], $version);
                 } catch (\Exception $e) {
                     $context['gwm_error'] = $e->getMessage();
+                }
+            } else {
+                $context['gwm_error'] = $txt['gwm_file_not_found'];
+            }
+            $sa = 'list';
+        } elseif ($sa === 'package') {
+            checkSession('get');
+            $version = $_REQUEST['version'] ?? '';
+            $file = $migrations_dir . '/' . $version . '.php';
+
+            if (file_exists($file)) {
+                try {
+                    $generator = new PackageGenerator();
+
+                    $zipPath = $generator->generate($file, $version);
+
+                    if (file_exists($zipPath)) {
+                        header('Content-Description: File Transfer');
+                        header('Content-Type: application/zip');
+                        header('Content-Disposition: attachment; filename="' . basename($zipPath) . '"');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate');
+                        header('Pragma: public');
+                        header('Content-Length: ' . filesize($zipPath));
+
+                        readfile($zipPath);
+
+                        unlink($zipPath);
+
+                        exit;
+                    } else {
+                        $context['gwm_error'] = sprintf($txt['gwm_package_error'], 'Zip file not found after generation.');
+                    }
+                } catch (\Exception $e) {
+                    $context['gwm_error'] = sprintf($txt['gwm_package_error'], $e->getMessage());
                 }
             } else {
                 $context['gwm_error'] = $txt['gwm_file_not_found'];

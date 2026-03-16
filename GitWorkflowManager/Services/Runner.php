@@ -94,7 +94,7 @@ class Runner
         $migration = new $className();
 
         if (!($migration instanceof AbstractMigration)) {
-            throw new \Exception('Migration class ' . $className . ' must extend SMF\Mods\GitWorkflowManager\AbstractMigration');
+            throw new \Exception('Migration class ' . $className . ' must extend GitWorkflowManager\AbstractMigration');
         }
 
         // INJECT DIRECT HANDLER
