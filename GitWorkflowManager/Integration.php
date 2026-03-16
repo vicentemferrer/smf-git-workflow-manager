@@ -26,10 +26,7 @@ class Integration
             'label' => $txt['gwm_title'],
             'function' => [Controller::class, 'main'],
             'icon' => 'server.png', // Standard SMF icon
-            'permission' => ['admin_forum'],
-            'subsections' => [
-                'list' => [$txt['gwm_list_migrations']],
-            ],
+            'permission' => ['admin_forum']
         ];
     }
 

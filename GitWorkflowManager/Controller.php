@@ -93,19 +93,7 @@ class Controller
                     $zipPath = $generator->generate($file, $version);
 
                     if (file_exists($zipPath)) {
-                        header('Content-Description: File Transfer');
-                        header('Content-Type: application/zip');
-                        header('Content-Disposition: attachment; filename="' . basename($zipPath) . '"');
-                        header('Expires: 0');
-                        header('Cache-Control: must-revalidate');
-                        header('Pragma: public');
-                        header('Content-Length: ' . filesize($zipPath));
-
-                        readfile($zipPath);
-
-                        unlink($zipPath);
-
-                        exit;
+                        $context['gwm_success'] = sprintf($txt['gwm_package_success'], basename($zipPath));
                     } else {
                         $context['gwm_error'] = sprintf($txt['gwm_package_error'], 'Zip file not found after generation.');
                     }

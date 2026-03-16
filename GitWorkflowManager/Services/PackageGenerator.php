@@ -65,7 +65,10 @@ class PackageGenerator
 
             // 9. Zip it
             $zipPath = dirname($this->tempDir) . '/' . $className . '.zip';
-            $this->createZip($this->tempDir, $zipPath);
+
+            if (!$this->createZip($this->tempDir, $zipPath)) {
+                throw new \Exception('Could not create zip archive.');
+            }
 
             // Cleanup
             $this->removeDirectory($this->tempDir);
@@ -158,8 +161,10 @@ class PackageGenerator
         }
 
         $zip = new \ZipArchive();
-        if (!$zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE)) {
-            return false;
+
+        $res = $zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        if ($res !== true) {
+            throw new \Exception("ZipArchive::open() failed with code: " . $res . " for path: " . $destination);
         }
 
         $source = str_replace('\\', '/', realpath($source));
