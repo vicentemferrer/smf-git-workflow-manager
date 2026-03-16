@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Git Workflow Manager for SMF
+ * @author vicentemferrer
+ * @copyright 2023 vicentemferrer
+ * @license MIT License
+ */
 namespace GitWorkflowManager\Handlers;
 
 use GitWorkflowManager\MigrationHandlerInterface;

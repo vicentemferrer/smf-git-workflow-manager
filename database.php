@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * Git Workflow Manager for SMF
+ * @author vicentemferrer
+ * @copyright 2023 vicentemferrer
+ * @license MIT License
+ */
+/**
  * Git Workflow Manager - Database Setup Script
  * This file is executed by the SMF Package Manager during installation to create the necessary tables.
  */
