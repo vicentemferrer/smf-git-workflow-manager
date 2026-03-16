@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Git Workflow Manager for SMF
+ * @author vicentemferrer
+ * @copyright 2026 vicentemferrer
+ * @license MIT License
+ */
 $txt['gwm_title'] = 'Git Workflow Manager';
 $txt['gwm_list_migrations'] = 'Listar Migraciones';
 $txt['gwm_version'] = 'Versión';
