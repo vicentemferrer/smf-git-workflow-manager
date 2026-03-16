@@ -56,6 +56,10 @@ function template_gwm_list()
                 $status_text = $txt['gwm_status_missing'];
             }
 
+            if (!empty($migration['is_packaged'])) {
+                $status_text .= ' <span class="smalltext">(' . $txt['gwm_status_packaged'] . ')</span>';
+            }
+
             echo '
                         <tr class="windowbg">
                             <td>', $migration['version'], '</td>
@@ -71,8 +75,9 @@ function template_gwm_list()
             }
 
             if ($migration['status'] != 'missing') {
+                $package_btn_txt = !empty($migration['is_packaged']) ? $txt['gwm_repackage'] : $txt['gwm_package'];
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=package;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], '" class="button">', $txt['gwm_package'], '</a>';
+                                <a href="', $scripturl, '?action=admin;area=gwm;sa=package;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], '" class="button">', $package_btn_txt, '</a>';
             }
 
             echo '
