@@ -6,6 +6,7 @@
  * @copyright 2026 vicentemferrer
  * @license MIT License
  */
+
 /**
  * Git Workflow Manager Template
  */

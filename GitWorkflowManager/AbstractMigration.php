@@ -6,6 +6,7 @@
  * @copyright 2026 vicentemferrer
  * @license MIT License
  */
+
 namespace GitWorkflowManager;
 
 /**
@@ -54,42 +55,47 @@ abstract class AbstractMigration
 
     protected function create_table($name, $columns, $indexes = [], $parameters = [], $if_exists = 'ignore')
     {
-        $this->handler->createTable($name, $columns, $indexes, $parameters, $if_exists);
+        $this->handler->create_table($name, $columns, $indexes, $parameters, $if_exists);
     }
 
     protected function drop_table($name)
     {
-        $this->handler->dropTable($name);
+        $this->handler->drop_table($name);
     }
 
     protected function add_column($table, $column_info)
     {
-        $this->handler->addColumn($table, $column_info);
+        $this->handler->add_column($table, $column_info);
     }
 
     protected function remove_column($table, $column_name)
     {
-        $this->handler->removeColumn($table, $column_name);
+        $this->handler->remove_column($table, $column_name);
     }
 
     protected function change_column($table, $column_name, $column_info)
     {
-        $this->handler->changeColumn($table, $column_name, $column_info);
+        $this->handler->change_column($table, $column_name, $column_info);
     }
 
     protected function add_index($table, $index_info)
     {
-        $this->handler->addIndex($table, $index_info);
+        $this->handler->add_index($table, $index_info);
     }
 
     protected function remove_index($table, $index_name)
     {
-        $this->handler->removeIndex($table, $index_name);
+        $this->handler->remove_index($table, $index_name);
     }
 
     protected function db_query($identifier, $query, $params = [])
     {
-        return $this->handler->dbQuery($identifier, $query, $params);
+        return $this->handler->db_query($identifier, $query, $params);
+    }
+
+    protected function insert_data($method, $table, $columns, $data, $keys = [])
+    {
+        $this->handler->insert_data($method, $table, $columns, $data, $keys);
     }
 
     // -------------------------------------------------------------------------
@@ -98,12 +104,12 @@ abstract class AbstractMigration
 
     protected function add_hook($hook, $function, $file = '', $object = false)
     {
-        $this->handler->addHook($hook, $function, $file, $object);
+        $this->handler->add_hook($hook, $function, $file, $object);
     }
 
     protected function remove_hook($hook, $function, $file = '', $object = false)
     {
-        $this->handler->removeHook($hook, $function, $file, $object);
+        $this->handler->remove_hook($hook, $function, $file, $object);
     }
 
     // -------------------------------------------------------------------------
@@ -112,6 +118,6 @@ abstract class AbstractMigration
 
     protected function update_settings($settings, $update = true)
     {
-        $this->handler->updateSettings($settings, $update);
+        $this->handler->update_settings($settings, $update);
     }
 }

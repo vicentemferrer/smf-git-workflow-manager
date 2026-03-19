@@ -6,6 +6,7 @@
  * @copyright 2026 vicentemferrer
  * @license MIT License
  */
+
 namespace GitWorkflowManager\Handlers;
 
 use GitWorkflowManager\MigrationHandlerInterface;
@@ -22,7 +23,7 @@ class RecordingHandler implements MigrationHandlerInterface
     protected $settings_actions = [];
 
     // --- Hooks ---
-    public function addHook($hook, $function, $file, $object)
+    public function add_hook($hook, $function, $file, $object)
     {
         $this->hooks[] = [
             'type' => 'add',
@@ -33,7 +34,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function removeHook($hook, $function, $file, $object)
+    public function remove_hook($hook, $function, $file, $object)
     {
         $this->hooks[] = [
             'type' => 'remove',
@@ -45,7 +46,7 @@ class RecordingHandler implements MigrationHandlerInterface
     }
 
     // --- Database ---
-    public function createTable($name, $columns, $indexes, $parameters, $if_exists)
+    public function create_table($name, $columns, $indexes, $parameters, $if_exists)
     {
         $this->db_actions[] = [
             'method' => 'db_create_table',
@@ -53,7 +54,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function dropTable($name)
+    public function drop_table($name)
     {
         $this->db_actions[] = [
             'method' => 'db_drop_table',
@@ -61,7 +62,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function addColumn($table, $column_info)
+    public function add_column($table, $column_info)
     {
         $this->db_actions[] = [
             'method' => 'db_add_column',
@@ -69,7 +70,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function removeColumn($table, $column_name)
+    public function remove_column($table, $column_name)
     {
         $this->db_actions[] = [
             'method' => 'db_remove_column',
@@ -77,7 +78,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function changeColumn($table, $column_name, $column_info)
+    public function change_column($table, $column_name, $column_info)
     {
         $this->db_actions[] = [
             'method' => 'db_change_column',
@@ -85,7 +86,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function addIndex($table, $index_info)
+    public function add_index($table, $index_info)
     {
         $this->db_actions[] = [
             'method' => 'db_add_index',
@@ -93,7 +94,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function removeIndex($table, $index_name)
+    public function remove_index($table, $index_name)
     {
         $this->db_actions[] = [
             'method' => 'db_remove_index',
@@ -101,7 +102,7 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
-    public function dbQuery($identifier, $query, $params)
+    public function db_query($identifier, $query, $params)
     {
         $this->db_actions[] = [
             'method' => 'db_query',
@@ -109,8 +110,16 @@ class RecordingHandler implements MigrationHandlerInterface
         ];
     }
 
+    public function insert_data($method, $table, $columns, $data, $keys)
+    {
+        $this->db_actions[] = [
+            'method' => 'db_insert',
+            'args' => [$method, $table, $columns, $data, $keys]
+        ];
+    }
+
     // --- Settings ---
-    public function updateSettings($settings, $update)
+    public function update_settings($settings, $update)
     {
         $this->settings_actions[] = [
             'args' => [$settings, $update]
@@ -119,17 +128,17 @@ class RecordingHandler implements MigrationHandlerInterface
 
     // --- Getters for the recorded data ---
 
-    public function getHooks()
+    public function get_hooks()
     {
         return $this->hooks;
     }
 
-    public function getDbActions()
+    public function get_db_actions()
     {
         return $this->db_actions;
     }
 
-    public function getSettingsActions()
+    public function get_settings_actions()
     {
         return $this->settings_actions;
     }

@@ -6,6 +6,7 @@
  * @copyright 2026 vicentemferrer
  * @license MIT License
  */
+
 namespace GitWorkflowManager\Services;
 
 use GitWorkflowManager\AbstractMigration;
@@ -93,7 +94,7 @@ class PackageGenerator
         $php .= "    require_once(dirname(__FILE__) . '/SSI.php');\n\n";
         $php .= "global \$smcFunc;\n\n";
 
-        foreach ($recorder->getDbActions() as $action) {
+        foreach ($recorder->get_db_actions() as $action) {
             $method = $action['method'];
             $args = $action['args'];
             // Basic serialization of arguments to PHP code
@@ -120,7 +121,7 @@ class PackageGenerator
 
         // Install Section
         $xml .= "\t<install>\n";
-        foreach ($install->getHooks() as $hook) {
+        foreach ($install->get_hooks() as $hook) {
             $xml .= sprintf(
                 "\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" />\n",
                 $hook['hook'],
@@ -134,7 +135,7 @@ class PackageGenerator
 
         // Uninstall Section
         $xml .= "\t<uninstall>\n";
-        foreach ($uninstall->getHooks() as $hook) {
+        foreach ($uninstall->get_hooks() as $hook) {
             if ($hook['type'] === 'remove') {
                 $xml .= sprintf(
                     "\t\t<hook hook=\"%s\" function=\"%s\" file=\"%s\" object=\"%s\" reverse=\"true\" />\n",
