@@ -19,6 +19,7 @@
 
         <hook hook="integrate_pre_include" function="$sourcedir/GitWorkflowManager/Integration.php" />
         <hook hook="integrate_admin_areas" function="GitWorkflowManager\Integration::hook_admin_areas" />
+        <code>install_gitignore.php</code>
     </install>
 
     <uninstall for="SMF 2.1.*">
@@ -30,5 +31,6 @@
         <remove-file name="$themedir/GitWorkflowManager.template.php" />
         <remove-file name="$themes_dir/default/languages/GitWorkflowManager.english.php" />
         <remove-file name="$themes_dir/default/languages/GitWorkflowManager.spanish_latin.php" />
+        <code>uninstall_gitignore.php</code>
     </uninstall>
 </package-info>
