@@ -58,58 +58,77 @@ class Controller
         if ($sa === 'apply') {
             checkSession('get');
             $version = $_REQUEST['version'] ?? '';
-            $file = $migrations_dir . '/' . $version . '.php';
 
-            if (file_exists($file)) {
-                try {
-                    $runner->up($file, $version);
-                    $context['gwm_success'] = sprintf($txt['gwm_applied_success'], $version);
-                } catch (\Exception $e) {
-                    $context['gwm_error'] = $e->getMessage();
-                }
-            } else {
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $version)) {
                 $context['gwm_error'] = $txt['gwm_file_not_found'];
+            } else {
+                $file = $migrations_dir . '/' . $version . '.php';
+
+                if (file_exists($file)) {
+                    try {
+                        $runner->up($file, $version);
+                        $context['gwm_success'] = sprintf($txt['gwm_applied_success'], $version);
+                    } catch (\Exception $e) {
+                        $context['gwm_error'] = $e->getMessage();
+                    }
+                } else {
+                    $context['gwm_error'] = $txt['gwm_file_not_found'];
+                }
             }
+
             // Refresh list
             $sa = 'list';
         } elseif ($sa === 'revert') {
             checkSession('get');
             $version = $_REQUEST['version'] ?? '';
-            $file = $migrations_dir . '/' . $version . '.php';
 
-            if (file_exists($file)) {
-                try {
-                    $runner->down($file, $version);
-                    $context['gwm_success'] = sprintf($txt['gwm_reverted_success'], $version);
-                } catch (\Exception $e) {
-                    $context['gwm_error'] = $e->getMessage();
-                }
-            } else {
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $version)) {
                 $context['gwm_error'] = $txt['gwm_file_not_found'];
+            } else {
+                $file = $migrations_dir . '/' . $version . '.php';
+
+                if (file_exists($file)) {
+                    try {
+                        $runner->down($file, $version);
+                        $context['gwm_success'] = sprintf($txt['gwm_reverted_success'], $version);
+                    } catch (\Exception $e) {
+                        $context['gwm_error'] = $e->getMessage();
+                    }
+                } else {
+                    $context['gwm_error'] = $txt['gwm_file_not_found'];
+                }
             }
+
             $sa = 'list';
         } elseif ($sa === 'package') {
             checkSession('get');
             $version = $_REQUEST['version'] ?? '';
-            $file = $migrations_dir . '/' . $version . '.php';
 
-            if (file_exists($file)) {
-                try {
-                    $generator = new PackageGenerator();
-
-                    $zipPath = $generator->generate($file, $version);
-
-                    if (file_exists($zipPath)) {
-                        $context['gwm_success'] = sprintf($txt['gwm_package_success'], basename($zipPath));
-                    } else {
-                        $context['gwm_error'] = sprintf($txt['gwm_package_error'], 'Zip file not found after generation.');
-                    }
-                } catch (\Exception $e) {
-                    $context['gwm_error'] = sprintf($txt['gwm_package_error'], $e->getMessage());
-                }
-            } else {
+            if (!preg_match('/^[a-zA-Z0-9_]+$/', $version)) {
                 $context['gwm_error'] = $txt['gwm_file_not_found'];
+            } else {
+                $file = $migrations_dir . '/' . $version . '.php';
+
+
+                if (file_exists($file)) {
+                    try {
+                        $generator = new PackageGenerator();
+
+                        $zipPath = $generator->generate($file, $version);
+
+                        if (file_exists($zipPath)) {
+                            $context['gwm_success'] = sprintf($txt['gwm_package_success'], basename($zipPath));
+                        } else {
+                            $context['gwm_error'] = sprintf($txt['gwm_package_error'], 'Zip file not found after generation.');
+                        }
+                    } catch (\Exception $e) {
+                        $context['gwm_error'] = sprintf($txt['gwm_package_error'], $e->getMessage());
+                    }
+                } else {
+                    $context['gwm_error'] = $txt['gwm_file_not_found'];
+                }
             }
+
             $sa = 'list';
         }
 

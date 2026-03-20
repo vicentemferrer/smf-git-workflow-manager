@@ -71,15 +71,15 @@ function template_gwm_list()
 
             if ($migration['status'] == 'pending') {
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=apply;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], '" class="button">', $txt['gwm_apply'], '</a>';
+                                <a href="', $scripturl, '?action=admin;area=gwm;sa=apply;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], ';sesc=', $context['session_id'], '" class="button">', $txt['gwm_apply'], '</a>';
             } elseif ($migration['status'] == 'applied') {
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=revert;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], '" class="button">', $txt['gwm_revert'], '</a>';
+                                <a href="', $scripturl, '?action=admin;area=gwm;sa=revert;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], ';sesc=', $context['session_id'], '" class="button">', $txt['gwm_revert'], '</a>';
             }
 
             if ($migration['status'] != 'missing') {
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=package;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], '" class="button">', $txt['gwm_package'], '</a>';
+                                <a href="', $scripturl, '?action=admin;area=gwm;sa=package;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], ';sesc=', $context['session_id'], '" class="button">', $txt['gwm_package'], '</a>';
             }
 
             echo '

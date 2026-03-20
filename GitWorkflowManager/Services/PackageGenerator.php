@@ -170,36 +170,47 @@ class PackageGenerator
         $zip = new \ZipArchive();
 
         $res = $zip->open($destination, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
         if ($res !== true) {
             throw new \Exception("ZipArchive::open() failed with code: " . $res . " for path: " . $destination);
         }
 
-        $source = str_replace('\\', '/', realpath($source));
+        $closed = false;
 
-        if (is_dir($source) === true) {
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($source), \RecursiveIteratorIterator::SELF_FIRST);
+        try {
+            $source = str_replace('\\', '/', realpath($source));
 
-            foreach ($files as $file) {
-                $file = str_replace('\\', '/', $file);
+            if (is_dir($source) === true) {
+                $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($source), \RecursiveIteratorIterator::SELF_FIRST);
 
-                // Ignore "." and ".." folders
-                if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
-                    continue;
+                foreach ($files as $file) {
+                    $file = str_replace('\\', '/', $file);
 
-                $file = realpath($file);
-                $file = str_replace('\\', '/', $file);
+                    // Ignore "." and ".." folders
+                    if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                        continue;
 
-                if (is_dir($file) === true) {
-                    $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-                } else if (is_file($file) === true) {
-                    $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+                    $file = realpath($file);
+                    $file = str_replace('\\', '/', $file);
+
+                    if (is_dir($file) === true) {
+                        $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+                    } else if (is_file($file) === true) {
+                        $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+                    }
                 }
+            } else if (is_file($source) === true) {
+                $zip->addFromString(basename($source), file_get_contents($source));
             }
-        } else if (is_file($source) === true) {
-            $zip->addFromString(basename($source), file_get_contents($source));
-        }
 
-        return $zip->close();
+            $closed = true;
+
+            return $zip->close();
+        } finally {
+            if (!$closed) {
+                @$zip->close();
+            }
+        }
     }
 
     protected function removeDirectory($dir)
