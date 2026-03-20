@@ -18,16 +18,16 @@ function template_gwm_list()
     echo '
     <div id="admin_content">
         <div class="cat_bar">
-            <h3 class="catbg">', $txt['gwm_title'], '</h3>
+            <h3 class="catbg">' . $txt['gwm_title'] . '</h3>
         </div>';
 
     if (!empty($context['gwm_success']))
         echo '
-        <div class="infobox">', $context['gwm_success'], '</div>';
+        <div class="infobox">' . $context['gwm_success'] . '</div>';
 
     if (!empty($context['gwm_error']))
         echo '
-        <div class="errorbox">', $context['gwm_error'], '</div>';
+        <div class="errorbox">' . $context['gwm_error'] . '</div>';
 
     echo '
         <div class="windowbg">
@@ -35,9 +35,9 @@ function template_gwm_list()
                 <table class="table_grid">
                     <thead>
                         <tr class="title_bar">
-                            <th scope="col" class="lefttext">', $txt['gwm_version'], '</th>
-                            <th scope="col" class="lefttext">', $txt['gwm_status'], '</th>
-                            <th scope="col" class="centertext">', $txt['gwm_actions'], '</th>
+                            <th scope="col" class="lefttext">' . $txt['gwm_version'] . '</th>
+                            <th scope="col" class="lefttext">' . $txt['gwm_status'] . '</th>
+                            <th scope="col" class="centertext">' . $txt['gwm_actions'] . '</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -45,7 +45,7 @@ function template_gwm_list()
     if (empty($context['migrations'])) {
         echo '
                         <tr>
-                            <td colspan="3" class="centertext">', $txt['gwm_no_migrations'], '</td>
+                            <td colspan="3" class="centertext">' . $txt['gwm_no_migrations'] . '</td>
                         </tr>';
     } else {
         foreach ($context['migrations'] as $migration) {
@@ -65,21 +65,21 @@ function template_gwm_list()
 
             echo '
                         <tr class="windowbg">
-                            <td>', $migration['version'], '</td>
-                            <td class="', $status_class, '">', $status_text, '</td>
+                            <td>' . $migration['version'] . '</td>
+                            <td class="' . $status_class . '">' . $status_text . '</td>
                             <td class="centertext">';
 
             if ($migration['status'] == 'pending') {
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=apply;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], ';sesc=', $context['session_id'], '" class="button">', $txt['gwm_apply'], '</a>';
+                                <a href="' . $scripturl . '?action=admin;area=gwm;sa=apply;version=' . $migration['version'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" class="button">' . $txt['gwm_apply'] . '</a>';
             } elseif ($migration['status'] == 'applied') {
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=revert;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], ';sesc=', $context['session_id'], '" class="button">', $txt['gwm_revert'], '</a>';
+                                <a href="' . $scripturl . '?action=admin;area=gwm;sa=revert;version=' . $migration['version'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" class="button">' . $txt['gwm_revert'] . '</a>';
             }
 
             if ($migration['status'] != 'missing') {
                 echo '
-                                <a href="', $scripturl, '?action=admin;area=gwm;sa=package;version=', $migration['version'], ';', $context['session_var'], '=', $context['session_id'], ';sesc=', $context['session_id'], '" class="button">', $txt['gwm_package'], '</a>';
+                                <a href="' . $scripturl . '?action=admin;area=gwm;sa=package;version=' . $migration['version'] . ';' . $context['session_var'] . '=' . $context['session_id'] . '" class="button">' . $txt['gwm_package'] . '</a>';
             }
 
             echo '
