@@ -7,6 +7,9 @@
     <type>modification</type>
 
     <install for="SMF 2.1.*">
+        <readme type="file" lang="english">README.md</readme>
+        <readme type="file" lang="spanish_latin">README.es.md</readme>
+
         <require-dir name="GitWorkflowManager" destination="$sourcedir" />
         <require-file name="Themes/default/GitWorkflowManager.template.php" destination="$themedir" />
 
