@@ -1,0 +1,35 @@
+name: Generate SMF Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build and Upload Mod Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create ZIP Archive
+        run: |
+          # Get the release tag name (e.g., v1.0.0)
+          VERSION=${GITHUB_REF#refs/tags/}
+
+          # Create a clean zip file of the repository
+          # We exclude .git, .github actions, and docs as SMF only needs the core files
+          zip -r GitWorkflowManager_$VERSION.zip . -x "*.git*" "*.github*" "docs/*"
+
+          # Output the created zip for verification
+          ls -lh GitWorkflowManager_$VERSION.zip
+
+      - name: Upload ZIP to Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: GitWorkflowManager_*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
